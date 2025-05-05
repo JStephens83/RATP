@@ -15,10 +15,14 @@
       :stops="stops" 
       @stopSelected="handleStopSelection" 
     />
+    <div v-if="isLoading">
+      <p>Chargement des horaires...</p>
+    </div>
+    
+    <TrainSchedule v-else :trainTimes="trainTimes" />
     
     <button @click="fetchTrainTimes">Afficher les horaires</button>
 
-    <TrainSchedule :trainTimes="trainTimes" />
   </div>
 </template>
 
@@ -37,12 +41,14 @@
   const selectedStopName = ref(null);
   const transformedLineId = ref(null);
   const trainTimes = ref([]);
+  const isLoading = ref(false);
 
+  // GESTION SÉLECTION LIGNE:
   const handleLineSelection = async (line) => {
     selectedLine.value = line;
     console.log("Ligne sélectionnée :", line);
 
-    // Récupérer les directions et les arrêts depuis getDirections
+    // Récupération des directions et arrêts depuis getDirections
     const { stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
     stops.value = fetchedStops;
     transformedLineId.value = lineId;
@@ -51,34 +57,46 @@
     console.log("Arrêts récupérés :", stops.value);
   };
 
+  // GESTION SÉLECTION DIRECTION:
   const handleDirectionSelection = (direction) => {
     selectedDirection.value = direction;
     console.log("Direction sélectionnée :", direction);
-    // Filtrer les arrêts pour la direction sélectionnée
-    // stopsForSelectedDirection.value = Object.entries(stopMapping.value)
-    //   .map(([stopId, stopName]) => ({ id: stopId, name: stopName }))
   };
 
-  const handleStopSelection = (stopId) => {
+  // GESTION SÉLECTION ARRÊT:
+  const handleStopSelection = async (stopId) => {
     console.log("Arrêt sélectionné :", stopId);  
-      // Vérifier si stopId se trouve dans filteredStops
+    // Vérification si stopId se trouve dans filteredStops
     const matchingStop = stops.value.find(stop => stop.id === stopId);
 
     if (matchingStop) {
-      // Si une correspondance est trouvée, récupérer le nom de l'arrêt
+      // Si une correspondance est trouvée, récupération du nom de l'arrêt
       selectedStopName.value = matchingStop.name;
       console.log("Nom de l'arrêt sélectionné :", selectedStopName.value);
     } else {
-      // Si aucune correspondance n'est trouvée
+      // Si pas de correspondance
       selectedStopName.value = "Nom inconnu";
       console.log("Aucune correspondance trouvée pour l'arrêt sélectionné.");
     }
 
-    // Mettre à jour l'arrêt sélectionné
+    // Mise à jour de l'arrêt sélectionné
     selectedStop.value = stopId;
+    
+    // Affichage message de chargement
+    isLoading.value = true;
+    
+    // Récupération des horaires
+    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+    if (response) {
+      trainTimes.value = response;
+      console.log("Horaires des derniers trains :", trainTimes.value);
+    }
+
+    // Masquer le message de chargement
+    isLoading.value = false;
   };
 
-  // Gestion de la récupération des horaires
+  // GESTION RÉCUPÉRATION DES HORAIRES:
   const fetchTrainTimes = async () => {
     console.log("Valeur de selectedStop :", selectedStop.value);
     console.log("Valeur de transformedLineId :", transformedLineId.value);
