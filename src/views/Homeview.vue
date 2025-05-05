@@ -11,7 +11,7 @@
     />
 
     <StopSelector 
-      v-if="stops.length > 0" 
+      v-if="selectedDirection" 
       :stops="stops" 
       @stopSelected="handleStopSelection" 
     />

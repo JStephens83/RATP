@@ -1,22 +1,20 @@
 import axios from "axios";
 import linesData from "../assets/lines.json";
-// Jeu de données "Arrêts et lignes associées"
 import stopsData from "../assets/arrets-lignes.json";
 
 const API_KEY = import.meta.env.VITE_RATP_API_KEY;
-const API_BASE_URL_LINES = "/api/marketplace/ilico/getData?method=getlc&format=json&TransportMode=metro";
+// const API_BASE_URL_LINES = "/api/marketplace/ilico/getData?method=getlc&format=json&TransportMode=metro";
 const API_BASE_URL_TIMES = "/api/marketplace/estimated-timetable";
-// https://prim.iledefrance-mobilites.fr/marketplace/stop-monitoring?MonitoringRef=STIF%3AStopPoint%3AQ%3A22075%3A&LineRef=STIF%3ALine%3A%3AC01371%3A
-const API_BASE_URL_STOPS = "/api/marketplace/stop-monitoring";
+const API_BASE_URL_STOPS = "api/marketplace/stop-monitoring?";
 const API_BASE_URL_STOP_NAMES = "api/marketplace/icar/getData?idrefa=463181&format=json&GeneralGroupOfEntities=false&multimodalStopPlace=false&monomodalStopPlace=true&Quay_FR1=true&Quay_LOC=true&StopPlaceEntrance=false&destinations=true&TransportMode=metro";
-// idrefa=463181&
 
+// Données locales :
 export const getLines = async () => {
   console.log("Données lignes: ", linesData.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line)
   return linesData.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line.map(line => ({
     name: line.ShortName,
     id: line.id,
-  }));; // Retourne les données locales
+  }));; 
 };
 
 //////////////////////////////////////////
@@ -43,15 +41,14 @@ export const getLines = async () => {
 // };
 //////////////////////////////////////////
 
-// Comparaison id arrêt <=> nom arret :
+// Récup données + Comparaison id arrêt <=> nom arret :
 export const fetchStopsFromOpenData = async () => {
   try {
     console.log("Données stops : ", stopsData);
-    // Filtrage mode "Métro"
     const metroStops = stopsData.filter(item => item.mode === "Metro");
     console.log("Arrêts filtrés (mode Métro) :", metroStops);
  
-    // Mapping entre les IDs des arrêts et leurs noms + Association stop_id à stop_name
+    // Mapping entre  IDs des arrêts et leurs noms + Association stop_id à stop_name
     const stopMapping = metroStops.reduce((acc, item) => {
       acc[item.stop_id] = item.stop_name;
       return acc;
@@ -66,6 +63,7 @@ export const fetchStopsFromOpenData = async () => {
   }
 };
 
+// Récup des directions
 export const getDirections = async (lineId) => {
   try {
     const transformedLineId = lineId.id.replace("FR1:Line:", "STIF:Line::");
@@ -113,13 +111,13 @@ export const getDirections = async (lineId) => {
         return extractedId;
       })
       .filter(id => {
-        // Vérifier si l'ID extrait est contenu dans une des clés de stopMapping
+        // Vérif si ID extrait est contenu dans une des clés de stopMapping
         const isContained = Object.keys(stopMapping).some(key => key.includes(id));
         // console.log(`L'ID ${id} est contenu dans stopMapping :`, isContained);
         return id && isContained;
       })
       .map(id => {
-        // Trouver la clé correspondante dans stopMapping
+        // Recherche clé correspondante dans stopMapping
         const matchingKey = Object.keys(stopMapping).find(key => key.includes(id));
         return {
           id: matchingKey,
@@ -127,7 +125,8 @@ export const getDirections = async (lineId) => {
         };
       })
       .filter((stop, index, self) => 
-        index === self.findIndex(s => s.name === stop.name) // Filtrage des doublons par noms
+        // Filtrage des doublons par noms
+        index === self.findIndex(s => s.name === stop.name) 
       );
 
     console.log("Arrêts correspondants entre stopPointRefs & stopMapping:", filteredStops);
@@ -153,6 +152,7 @@ export const getDirections = async (lineId) => {
   }
 };
 
+// Récupération des arrêts
 export const fetchStops = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL_STOP_NAMES}`, {
@@ -163,7 +163,7 @@ export const fetchStops = async () => {
     });
 
     // console.log("réponse fetchStops",JSON.stringify(response.data, null, 2)); // Affiche les données formatées
-    console.dir('response fetchStop()', response.data, { depth: null }); // Affiche l'objet dans un format interactif
+    console.dir('response fetchStop()', response.data, { depth: null });
     return response.data
   } catch (error) {
     console.error("Erreur lors de la récupération des infos des arrêts :", error); 
@@ -171,46 +171,45 @@ export const fetchStops = async () => {
   }
 }
 
-// export const getLastTrainTimes = async (lineId, directionId) => {
-  export const getLastTrainTimes = async (selectedStop, transformedLineId) => {
-    try {
-      // Transformer le format de selectedStop.value
-      const stopId = selectedStop.replace("IDFM:", "STIF:StopPoint:Q:") + ":";
-  
-      // Effectuer l'appel à l'API
-      const response = await axios.get("https://prim.iledefrance-mobilites.fr/marketplace/stop-monitoring?", {
-        headers: { 
-          "apikey": API_KEY,
-          "Accept": "application/json"
-        },
-        params: {
-          MonitoringRef: stopId, // Arrêt sélectionné
-          LineRef: transformedLineId // Ligne transformée
-        }
-      });
-  
-      console.log("URL API derniers trains :", response);
-      console.log("Réponse API derniers trains :", response.data);
-      
-      // Extraire les horaires des derniers trains
-      const monitoredStopVisits = response.data?.Siri?.ServiceDelivery?.StopMonitoringDelivery?.[0]?.MonitoredStopVisit;
+// Récupération des horaires
+export const getLastTrainTimes = async (selectedStop, transformedLineId) => {
+  try {
+    const stopId = selectedStop.replace("IDFM:", "STIF:StopPoint:Q:") + ":";
 
-      if (!monitoredStopVisits || !Array.isArray(monitoredStopVisits)) {
-        console.warn("Aucune donnée trouvée pour les horaires des derniers trains.");
-        return [];
+    // Appel à l'API
+    const response = await axios.get(API_BASE_URL_STOPS, {
+      headers: { 
+        "apikey": API_KEY,
+        "Accept": "application/json"
+      },
+      params: {
+        MonitoringRef: stopId,
+        LineRef: transformedLineId
       }
+    });
 
-      // Itérer sur la liste et extraire les horaires
-      const trainTimes = monitoredStopVisits.map(visit => {
-        const expectedArrivalTime = visit?.MonitoredVehicleJourney?.MonitoredCall?.ExpectedArrivalTime;
-        return expectedArrivalTime ? { time: expectedArrivalTime } : null;
-      }).filter(item => item !== null); // Filtrer les entrées nulles
+    console.log("URL API derniers trains :", response);
+    console.log("Réponse API derniers trains :", response.data);
+    
+    // Extraction horaires derniers trains
+    const monitoredStopVisits = response.data?.Siri?.ServiceDelivery?.StopMonitoringDelivery?.[0]?.MonitoredStopVisit;
 
-      console.log("Horaires des derniers trains extraits :", trainTimes);
-      return trainTimes;
-  
-    } catch (error) {
-      console.error("Erreur lors de la récupération des horaires des derniers trains :", error);
-      return null;
+    if (!monitoredStopVisits || !Array.isArray(monitoredStopVisits)) {
+      console.warn("Aucune donnée trouvée pour les horaires des derniers trains.");
+      return [];
     }
-  };
+
+    // Itération et extraction des horaires
+    const trainTimes = monitoredStopVisits.map(visit => {
+      const expectedArrivalTime = visit?.MonitoredVehicleJourney?.MonitoredCall?.ExpectedArrivalTime;
+      return expectedArrivalTime ? { time: expectedArrivalTime } : null;
+    }).filter(item => item !== null);
+
+    console.log("Horaires des derniers trains extraits :", trainTimes);
+    return trainTimes;
+
+  } catch (error) {
+    console.error("Erreur lors de la récupération des horaires des derniers trains :", error);
+    return null;
+  }
+};
