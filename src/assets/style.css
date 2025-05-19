@@ -1,5 +1,22 @@
+/* Style général pour le body */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background: linear-gradient(135deg, 
+    #64B5F6,  /* Bleu clair */
+    #292092,  /* Bleu foncé */
+    #00AB91   /* Vert */
+  );
+  background-size: 300% 300%; /* Augmenter la taille pour permettre le défilement */
+  animation: scrollColors 10s linear infinite; /* Animation infinie */
+  color: #fff;
+}
+
+/* Animation pour faire défiler les couleurs */
+@keyframes scrollColors {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
 }
