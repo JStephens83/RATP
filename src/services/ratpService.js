@@ -14,6 +14,8 @@ export const getLines = async () => {
   return linesData.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line.map(line => ({
     name: line.ShortName,
     id: line.id,
+    color: "#" + line.Presentation.Colour,
+    textColor: "#" + line.Presentation.TextColour,
   }));; 
 };
 

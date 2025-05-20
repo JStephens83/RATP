@@ -9,7 +9,7 @@
       </select>
     </div>
     <div v-else>
-      <p>Chargement des directions...</p>
+      <p class="loading">Chargement des directions...</p>
     </div>
   </div>
 </template>

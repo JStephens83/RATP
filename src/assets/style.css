@@ -1,6 +1,8 @@
 /* Style général pour le body */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Fjalla One",  Arial, sans-serif;
+  font-weight: 400;
+  font-style: normal;
   background: linear-gradient(135deg, 
     #64B5F6,  /* Bleu clair */
     #292092,  /* Bleu foncé */
@@ -19,4 +21,16 @@ body {
   100% {
     background-position: 100% 0%;
   }
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.loading {
+  display: block;
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 10vh 0 10vh 0;
 }
