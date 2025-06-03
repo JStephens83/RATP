@@ -5,7 +5,7 @@ body {
   font-style: normal;
   background: linear-gradient(135deg, 
     #64B5F6,  /* Bleu clair */
-    #292092,  /* Bleu foncé */
+    #050D9E,  /* Bleu foncé */
     #00AB91   /* Vert */
   );
   background-size: 300% 300%; /* Augmenter la taille pour permettre le défilement */
@@ -23,14 +23,20 @@ body {
   }
 }
 
+.station {
+  background-color: #050D9E;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
 }
 
-.loading {
+
+
+.list-labels {
   display: block;
   text-align: center;
-  font-size: 1.5rem;
-  margin: 10vh 0 10vh 0;
+  font-size: 2rem;
+  margin: 20vh 0 10vh 0;
 }

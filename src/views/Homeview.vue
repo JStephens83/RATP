@@ -19,9 +19,12 @@
       <p>Chargement des horaires...</p>
     </div>
     
-    <TrainSchedule v-else :trainTimes="trainTimes" />
+    <TrainSchedule 
+      v-if="trainTimes.length > 0"
+      :trainTimes="trainTimes"
+    />
     
-    <button @click="fetchTrainTimes">Afficher les horaires</button>
+    <!-- <button @click="fetchTrainTimes">Afficher les horaires</button> -->
 
   </div>
 </template>

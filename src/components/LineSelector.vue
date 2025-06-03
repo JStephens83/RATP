@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="lignes.length > 0">
-      <label for="line">Sélectionnez une ligne</label>
+      <h2 class="list-labels">Sélectionnez une ligne</h2>
       <ul class="line-list">
         <li
           v-for="ligne in lignes"
@@ -25,7 +25,9 @@
     </div>
     <div v-else>
       <p class="loading"
-        :style="selectedLine ? { backgroundColor: selectedLine.color, color: selectedLine.textColor } : {}"
+        :style="selectedLine 
+        ? { backgroundColor: selectedLine.color, color: selectedLine.textColor } 
+        : {}"
       >Chargement des lignes...</p>
     </div>
   </div>
@@ -59,19 +61,13 @@
   });
 </script>
 
-<style>
-  label {
-    display: block;
-    text-align: center;
-    font-size: 2rem;
-    margin: 20vh 0 10vh 0;
-  }
-  ul {
+<style scoped>
+  ul.line-list {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
   }
-  li {
+  ul.line-list>li {
     display: flex;
     border-radius: 50%;
     cursor: pointer;  
@@ -81,8 +77,9 @@
     justify-content: center;
     font-size: 2.1rem;
     font-weight: bold;
+    transition: 0.3s;
   }
-  li:hover {
+  ul.line-list>li:hover {
     /* Ajouter animation */
     box-shadow: 2px 2px 2px #000;
   }

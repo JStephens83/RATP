@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Horaires des derniers trains</h2>
+    <h2 class="list-labels">Horaires des derniers trains</h2>
     <ul v-if="trainTimes.length > 0">
       <p>Prochains horaires :</p>
       <li v-for="(train, index) in trainTimes" :key="index">

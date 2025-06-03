@@ -1,12 +1,22 @@
 <template>
   <div>
     <div v-if="stops.length > 0">
-      <label for="stop">Sélectionnez un arrêt :</label>
-      <select id="stop" v-model="selectedStop"  @change="emitStop">
+      <h2 class="list-labels">Sélectionnez un arrêt :</h2>
+      <ul class="stop-list">
+        <li
+          v-for="stop in stops"
+          :key="stop.id"
+          :class="{ selected: selectedStop === stop.id }"
+          @click="selectStop(stop.id)"
+        >
+          {{ stop.name }}
+        </li>
+      </ul>
+      <!-- <select id="stop" v-model="selectedStop"  @change="emitStop">
         <option v-for="stop in stops" :key="stop.id" :value="stop.id">
           {{ stop.name }}
         </option>
-      </select>
+      </select> -->
     </div>
     <div v-else>
       <p class="loading">Chargement des arrêts...</p>
@@ -17,7 +27,7 @@
 <script setup>
   // API Prochains passages - requête unitaire
   // https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_unitaire
-  import { ref, onMounted } from "vue";
+  import { ref } from "vue";
 
   // Arrêt sélectionné
   const selectedStop = ref(null);
@@ -35,8 +45,44 @@
   const emit = defineEmits(["stopSelected"]);
 
   // Emit arrêt sélectionné
-  const emitStop = () => {
-    emit("stopSelected", selectedStop.value);
+  const selectStop = (stopId) => {
+    selectedStop.value = stopId;
+    emit("stopSelected", stopId);
   };
   console.log("Arrêt sélectionné :", selectedStop.value);
 </script>
+
+<style scoped>
+  .loading {
+    color: red;
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 10vh 0 10vh 0;
+  }
+  .stop-list {
+    display: flex;
+    flex-direction: row;  
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stop-list li {
+    list-style-type: none;
+    padding: 1em;
+    margin: 0.5em;
+    cursor: pointer;
+    background-color: #050D9E;
+    color : #fff;font-size: 1.5rem;
+    min-width: 10vw;
+    text-align: center;
+    transition: 0.3s;
+  }
+  .stop-list li.selected {
+    background: #64B5F6;
+    color: #292092;
+    font-weight: bold;
+  }
+  .stop-list li:hover {
+    box-shadow: 2px 2px 2px #000;
+  }
+</style>
