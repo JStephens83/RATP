@@ -1,5 +1,42 @@
+/* Style général pour le body */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  font-family: "Fjalla One",  Arial, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: linear-gradient(135deg, 
+    #64B5F6,  /* Bleu clair */
+    #050D9E,  /* Bleu foncé */
+    #00AB91   /* Vert */
+  );
+  background-size: 300% 300%; /* Augmenter la taille pour permettre le défilement */
+  animation: scrollColors 10s linear infinite; /* Animation infinie */
+  color: #fff;
+}
+
+/* Animation pour faire défiler les couleurs */
+@keyframes scrollColors {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.station {
+  background-color: #050D9E;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+
+
+.list-labels {
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  margin: 20vh 0 10vh 0;
 }
