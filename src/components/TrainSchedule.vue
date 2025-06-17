@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="list-labels">Horaires des derniers trains</h2>
-    <ul v-if="trainTimes.length > 0">
+    <ul v-if="trainTimes.length > 0" ref="scrollTarget">
       <p>Prochains horaires :</p>
       <li v-for="(train, index) in trainTimes" :key="index">
         {{ formatTime(train.time) }} - {{ calculateTimeDifference(train.time) }} 
@@ -12,12 +12,17 @@
 </template>
 
 <script setup>
+  import { watch } from "vue";
+  import { useAutoScroll } from "../composables/useAutoScroll";
+
   const props = defineProps({
     trainTimes: {
       type: Array,
       required: true,
     },
   });
+  
+  const { scrollTarget, triggerScroll } = useAutoScroll();
 
   // Formatage des horaires
   const formatTime = (time) => {
@@ -40,4 +45,14 @@
 
     return `Arrive dans ${minutes} min ${seconds} sec`;
   };
+
+  watch(
+    () => props.trainTimes,
+    async (newVal) => {
+      if (newVal.length > 0) {
+        await triggerScroll(true);
+      }
+    },
+    { immediate: true }
+  );
 </script>

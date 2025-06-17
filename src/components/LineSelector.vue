@@ -2,7 +2,7 @@
   <div>
     <div v-if="lignes.length > 0">
       <h2 class="list-labels">Sélectionnez une ligne</h2>
-      <ul class="line-list">
+      <ul class="line-list"  ref="scrollTarget">
         <li
           v-for="ligne in lignes"
           :key="ligne.id"
@@ -35,11 +35,14 @@
 
 <script setup>
   // API Diffusion des données du référentiel des lignes - ILICO : https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ilico
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, watch } from "vue";
   import { getLines } from "../services/ratpService";
+  import { useAutoScroll } from "../composables/useAutoScroll";
+
 
   const lignes = ref([]);
   const selectedLine = ref(null);
+  const { scrollTarget, triggerScroll } = useAutoScroll();
 
   // Vérification de l'emit:
   const emit = defineEmits(["lineSelected"]);
@@ -57,8 +60,17 @@
 
   onMounted(async () => {
     lignes.value = await getLines();
-    console.log("Lignes chargées :", lignes.value);
+    // console.log("Lignes chargées :", lignes.value);
   });
+
+  watch(
+    lignes,
+    async (newVal) => {
+      if (newVal.length > 0) {
+        await triggerScroll(true);
+      }
+    }
+  );
 </script>
 
 <style scoped>

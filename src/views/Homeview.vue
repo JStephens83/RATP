@@ -49,37 +49,37 @@
   // GESTION SÉLECTION LIGNE:
   const handleLineSelection = async (line) => {
     selectedLine.value = line;
-    console.log("Ligne sélectionnée :", line);
+    // console.log("Ligne sélectionnée :", line);
 
     // Récupération des directions et arrêts depuis getDirections
     const { stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
     stops.value = fetchedStops;
     transformedLineId.value = lineId;
     
-    console.log("Résultat de getDirections :", fetchedStops);
-    console.log("Arrêts récupérés :", stops.value);
+    // console.log("Résultat de getDirections :", fetchedStops);
+    // console.log("Arrêts récupérés :", stops.value);
   };
 
   // GESTION SÉLECTION DIRECTION:
   const handleDirectionSelection = (direction) => {
     selectedDirection.value = direction;
-    console.log("Direction sélectionnée :", direction);
+    // console.log("Direction sélectionnée :", direction);
   };
 
   // GESTION SÉLECTION ARRÊT:
   const handleStopSelection = async (stopId) => {
-    console.log("Arrêt sélectionné :", stopId);  
+    // console.log("Arrêt sélectionné :", stopId);  
     // Vérification si stopId se trouve dans filteredStops
     const matchingStop = stops.value.find(stop => stop.id === stopId);
 
     if (matchingStop) {
       // Si une correspondance est trouvée, récupération du nom de l'arrêt
       selectedStopName.value = matchingStop.name;
-      console.log("Nom de l'arrêt sélectionné :", selectedStopName.value);
+      // console.log("Nom de l'arrêt sélectionné :", selectedStopName.value);
     } else {
       // Si pas de correspondance
       selectedStopName.value = "Nom inconnu";
-      console.log("Aucune correspondance trouvée pour l'arrêt sélectionné.");
+      // console.log("Aucune correspondance trouvée pour l'arrêt sélectionné.");
     }
 
     // Mise à jour de l'arrêt sélectionné
@@ -92,7 +92,7 @@
     const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
     if (response) {
       trainTimes.value = response;
-      console.log("Horaires des derniers trains :", trainTimes.value);
+      // console.log("Horaires des derniers trains :", trainTimes.value);
     }
 
     // Masquer le message de chargement
@@ -100,21 +100,21 @@
   };
 
   // GESTION RÉCUPÉRATION DES HORAIRES:
-  const fetchTrainTimes = async () => {
-    console.log("Valeur de selectedStop :", selectedStop.value);
-    console.log("Valeur de transformedLineId :", transformedLineId.value);
+  /*const fetchTrainTimes = async () => {
+    // console.log("Valeur de selectedStop :", selectedStop.value);
+    // console.log("Valeur de transformedLineId :", transformedLineId.value);
 
     if (!selectedStop.value || !transformedLineId.value) {
       console.warn("Arrêt ou ligne non sélectionné !");
       return;
     }
 
-    console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
+    // console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
 
     const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
     if (response) {
       trainTimes.value = response; // Stocker les résultats
-      console.log("Horaires des derniers trains :", trainTimes.value);
+      // console.log("Horaires des derniers trains :", trainTimes.value);
     }
-  };
+  };*/
 </script>

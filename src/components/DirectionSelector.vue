@@ -2,7 +2,7 @@
   <div>
     <div v-if="directions.length > 0">
       <h2 class="list-labels">Sélectionnez une direction :</h2>
-      <ul class="direction-list">
+      <ul class="direction-list" ref="scrollTarget">
         <li
           v-for="direction in directions"
           :key="direction.id"
@@ -29,25 +29,31 @@
   // https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_globale
   import { ref, watch } from "vue";
   import { getDirections } from "../services/ratpService";
+  import { useAutoScroll } from "../composables/useAutoScroll";
 
   // Réception de la ligne sélectionnée depuis Homeview.vue
   const props = defineProps({
     selectedLine: {
-      type: String,
+      type: Object,
       required: true,
     },
   });
 
   const directions = ref([]);
   const selectedDirection = ref(null);
+  const { scrollTarget, triggerScroll } = useAutoScroll();
 
-  watch(() => props.selectedLine, async (newLineId) => {
+
+  watch(
+    () => props.selectedLine, 
+    async (newLineId) => {
       if (newLineId) {
-        console.log("Appel de getDirections avec la ligne :", newLineId.name);
+        // console.log("Appel de getDirections avec la ligne :", newLineId.name);
         const { directions: fetchedDirections } = await getDirections(newLineId);
         directions.value = fetchedDirections;
-        console.log("Directions récupérées :", directions.value);
+        // console.log("Directions récupérées :", directions.value);
         // console.log("Arrêts récupérés dans DirectionSelector.vue :", stops.value);
+        await triggerScroll(true);
       }
     },
     { immediate: true }
