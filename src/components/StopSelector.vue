@@ -66,13 +66,6 @@
 </script>
 
 <style scoped>
-  .loading {
-    color: red;
-    display: block;
-    text-align: center;
-    font-size: 1.5rem;
-    margin: 10vh 0 10vh 0;
-  }
   .stop-list {
     display: flex;
     flex-direction: row;  

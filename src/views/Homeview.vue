@@ -4,21 +4,28 @@
       @lineSelected="handleLineSelection" 
     />
 
-    <DirectionSelector 
-      v-if="selectedLine" 
-      :selectedLine="selectedLine" 
-      @directionSelected="handleDirectionSelection" 
+    <div v-if="isLoadingDirections">
+      <p class="loading"><span>Chargement des directions...</span></p>
+    </div>
+    <DirectionSelector
+      v-if="selectedLine && !isLoadingDirections"
+      :selectedLine="selectedLine"
+      :directions="directions"
+      @directionSelected="handleDirectionSelection"
     />
 
+    <div v-if="isLoading">
+      <p class="loading">Chargement des arrêts...</p>
+    </div>
     <StopSelector 
       v-if="selectedDirection" 
       :stops="stops" 
       @stopSelected="handleStopSelection" 
     />
+
     <div v-if="isLoading">
-      <p>Chargement des horaires...</p>
+      <p class="loading">Chargement des horaires...</p>
     </div>
-    
     <TrainSchedule 
       v-if="trainTimes.length > 0"
       :trainTimes="trainTimes"
@@ -45,16 +52,27 @@
   const transformedLineId = ref(null);
   const trainTimes = ref([]);
   const isLoading = ref(false);
+  const directions = ref([]);
+  const isLoadingDirections = ref(false);
+  const isLoadingStops = ref(false);
 
   // GESTION SÉLECTION LIGNE:
   const handleLineSelection = async (line) => {
     selectedLine.value = line;
     // console.log("Ligne sélectionnée :", line);
+    selectedDirection.value = null;
+    directions.value = [];
+    stops.value = [];
+    trainTimes.value = [];
+    isLoadingDirections.value = true;
 
     // Récupération des directions et arrêts depuis getDirections
-    const { stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
+    const { directions: fetchedDirections, stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
+    directions.value = fetchedDirections;
     stops.value = fetchedStops;
     transformedLineId.value = lineId;
+
+    isLoadingDirections.value = false;
     
     // console.log("Résultat de getDirections :", fetchedStops);
     // console.log("Arrêts récupérés :", stops.value);
@@ -85,6 +103,9 @@
     // Mise à jour de l'arrêt sélectionné
     selectedStop.value = stopId;
     
+    // réinitialisation des horaires:
+    trainTimes.value = [];
+
     // Affichage message de chargement
     isLoading.value = true;
     
