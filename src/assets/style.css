@@ -7,11 +7,10 @@ body {
     #64B5F6,
     #050D9E,
     #00AB91,
-    #050D9E,
     #64B5F6
   );
   background-size: 400% 400%;
-  animation: scrollColors 15s linear infinite;
+  animation: scrollColors 20s linear infinite;
   color: #fff;
 }
 
