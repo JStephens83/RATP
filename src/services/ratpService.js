@@ -3,7 +3,6 @@ import linesData from "../assets/lines.json";
 import stopsData from "../assets/arrets-lignes.json";
 
 const API_KEY = import.meta.env.VITE_RATP_API_KEY;
-// const API_BASE_URL_LINES = "/api/marketplace/ilico/getData?method=getlc&format=json&TransportMode=metro";
 const API_BASE_URL_TIMES = "/api/marketplace/estimated-timetable";
 const API_BASE_URL_STOPS = "api/marketplace/stop-monitoring?";
 const API_BASE_URL_STOP_NAMES = "api/marketplace/icar/getData?idrefa=463181&format=json&GeneralGroupOfEntities=false&multimodalStopPlace=false&monomodalStopPlace=true&Quay_FR1=true&Quay_LOC=true&StopPlaceEntrance=false&destinations=true&TransportMode=metro";
@@ -16,32 +15,8 @@ export const getLines = async () => {
     id: line.id,
     color: "#" + line.Presentation.Colour,
     textColor: "#" + line.Presentation.TextColour,
-  }));; 
+  }));
 };
-
-//////////////////////////////////////////
-// Fonction officielle:
-// export const getLines = async () => {
-//   try {
-//     const response = await axios.get(`${API_BASE_URL_LINES}`, {
-//       headers: { 
-//         "apikey": API_KEY,
-//         "Accept": "application/json"
-//       }
-//     });
-//     console.log("Réponse API :", response.data);
-
-//     return response.data.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line.map(line => ({
-//       name: line.ShortName,
-//       id: line.id,
-//     }));
-//   }
-//    catch (error) {
-//     console.error("Erreur lors de la récupération des lignes :", error.response?.data || error.message);
-//     return [];
-//   }
-// };
-//////////////////////////////////////////
 
 // Récup données + Comparaison id arrêt <=> nom arret :
 export const fetchStopsFromOpenData = async () => {

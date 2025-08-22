@@ -13,15 +13,6 @@
           {{ ligne.name }}
         </li>
       </ul>
-    <!-- <select 
-      id="line" 
-      v-model="selectedLine" 
-      @change="handleLineChange"
-    >
-      <option v-for="ligne in lignes" :key="ligne.id" :value="ligne">
-        {{ ligne.name }}
-      </option>
-    </select> -->
     </div>
     <div v-else>
       <p class="loading"
@@ -46,12 +37,6 @@
 
   // Vérification de l'emit:
   const emit = defineEmits(["lineSelected"]);
-
-  // va avec le select/option:
-  // const handleLineChange = () => {
-  //   console.log("Valeur de selectedLine dans LineSelector :", selectedLine.value);
-  //   emit("lineSelected", selectedLine.value); // Emit de la valeur sélectionnée
-  // };
 
   const selectLine = (ligne) => {
     selectedLine.value = ligne;

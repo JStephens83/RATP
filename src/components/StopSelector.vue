@@ -12,11 +12,6 @@
           {{ stop.name }}
         </li>
       </ul>
-      <!-- <select id="stop" v-model="selectedStop"  @change="emitStop">
-        <option v-for="stop in stops" :key="stop.id" :value="stop.id">
-          {{ stop.name }}
-        </option>
-      </select> -->
     </div>
     <div v-else>
       <p class="loading">Chargement des arrêts...</p>

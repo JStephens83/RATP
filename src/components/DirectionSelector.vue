@@ -12,11 +12,6 @@
           {{ direction.name }}
         </li>
       </ul>
-      <!-- <select id="direction" v-model="selectedDirection"  @change="emitData">
-        <option v-for="direction in directions" :key="direction.id" :value="direction.name">
-          {{ direction.name }}
-        </option>
-      </select> -->
     </div>
     <div v-else>
       <p class="loading">Chargement des directions...</p>

@@ -30,9 +30,6 @@
       v-if="trainTimes.length > 0"
       :trainTimes="trainTimes"
     />
-    
-    <!-- <button @click="fetchTrainTimes">Afficher les horaires</button> -->
-
   </div>
 </template>
 
@@ -119,23 +116,4 @@
     // Masquer le message de chargement
     isLoading.value = false;
   };
-
-  // GESTION RÉCUPÉRATION DES HORAIRES:
-  /*const fetchTrainTimes = async () => {
-    // console.log("Valeur de selectedStop :", selectedStop.value);
-    // console.log("Valeur de transformedLineId :", transformedLineId.value);
-
-    if (!selectedStop.value || !transformedLineId.value) {
-      console.warn("Arrêt ou ligne non sélectionné !");
-      return;
-    }
-
-    // console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
-
-    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
-    if (response) {
-      trainTimes.value = response; // Stocker les résultats
-      // console.log("Horaires des derniers trains :", trainTimes.value);
-    }
-  };*/
 </script>

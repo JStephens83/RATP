@@ -2,7 +2,6 @@
   <div class="train-schedule">
     <h2 class="list-labels">Horaires des prochains trains</h2>
     <ul v-if="trainTimes.length > 0" ref="scrollTarget" class="time-list">
-      <!-- <p>Prochains horaires :</p> -->
       <li v-for="(train, index) in trainTimes" :key="index">
         {{ formatTime(train.time) }} - {{ calculateTimeDifference(train.time) }} 
       </li>
