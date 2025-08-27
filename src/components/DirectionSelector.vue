@@ -28,7 +28,7 @@
   // API Prochains passages - requête globale
   // https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_globale
   import { ref, watch } from "vue";
-  import { getDirections } from "../services/ratpService";
+  import { useDirections } from "../composables/api/useDirections";
 
   // Réception de la ligne sélectionnée depuis Homeview.vue
   const props = defineProps({

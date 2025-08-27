@@ -36,7 +36,7 @@
 <script setup>
   // API Diffusion des données du référentiel des lignes - ILICO : https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ilico
   import { ref, onMounted } from "vue";
-  import { getLines } from "../services/ratpService";
+  import { useLines } from "../composables/api/useLines";
 
   const lignes = ref([]);
   const selectedLine = ref(null);
@@ -56,7 +56,7 @@
   };
 
   onMounted(async () => {
-    lignes.value = await getLines();
+    lignes.value = await useLines();
     console.log("Lignes chargées :", lignes.value);
   });
 </script>

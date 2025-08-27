@@ -31,7 +31,8 @@
 
 <script setup>
   import { ref } from "vue";
-  import { getDirections, getLastTrainTimes } from "../services/ratpService";
+  import { useDirections } from "../composables/api/useDirections";
+  import { useTrainTimes } from "../composables/api/useTrainTimes";
   import LineSelector from "../components/LineSelector.vue";
   import DirectionSelector from "../components/DirectionSelector.vue";
   import StopSelector from "../components/StopSelector.vue";
@@ -51,12 +52,12 @@
     selectedLine.value = line;
     console.log("Ligne sélectionnée :", line);
 
-    // Récupération des directions et arrêts depuis getDirections
-    const { stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
+    // Récupération des directions et arrêts depuis useDirections
+    const { stops: fetchedStops, transformedLineId: lineId } = await useDirections(line);
     stops.value = fetchedStops;
     transformedLineId.value = lineId;
     
-    console.log("Résultat de getDirections :", fetchedStops);
+    console.log("Résultat de useDirections :", fetchedStops);
     console.log("Arrêts récupérés :", stops.value);
   };
 
@@ -89,7 +90,7 @@
     isLoading.value = true;
     
     // Récupération des horaires
-    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+    const response = await useTrainTimes(selectedStop.value, transformedLineId.value);
     if (response) {
       trainTimes.value = response;
       console.log("Horaires des derniers trains :", trainTimes.value);
@@ -111,7 +112,7 @@
 
     console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
 
-    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+    const response = await useTrainTimes(selectedStop.value, transformedLineId.value);
     if (response) {
       trainTimes.value = response; // Stocker les résultats
       console.log("Horaires des derniers trains :", trainTimes.value);
