@@ -6,6 +6,7 @@ export function useLines() {
 
   // Récupération locale
   const getLocalLines = async () => {
+    console.log("Données lignes: ", linesData.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line)
     return linesData.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line.map(line => ({
       name: line.ShortName,
       id: line.id,

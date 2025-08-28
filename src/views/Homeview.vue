@@ -53,7 +53,8 @@
     console.log("Ligne sélectionnée :", line);
 
     // Récupération des directions et arrêts depuis useDirections
-    const { stops: fetchedStops, transformedLineId: lineId } = await useDirections(line);
+    const { getDirections } = useDirections();
+    const { stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
     stops.value = fetchedStops;
     transformedLineId.value = lineId;
     
@@ -69,7 +70,8 @@
 
   // GESTION SÉLECTION ARRÊT:
   const handleStopSelection = async (stopId) => {
-    console.log("Arrêt sélectionné :", stopId);  
+    console.log("Arrêt sélectionné :", stopId, typeof stopId);
+    console.log("IDs disponibles :", stops.value.map(s => [s.id, typeof s.id]));
     // Vérification si stopId se trouve dans filteredStops
     const matchingStop = stops.value.find(stop => stop.id === stopId);
 
@@ -90,7 +92,8 @@
     isLoading.value = true;
     
     // Récupération des horaires
-    const response = await useTrainTimes(selectedStop.value, transformedLineId.value);
+    const { getLastTrainTimes } = useTrainTimes();
+    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
     if (response) {
       trainTimes.value = response;
       console.log("Horaires des derniers trains :", trainTimes.value);
@@ -112,7 +115,8 @@
 
     console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
 
-    const response = await useTrainTimes(selectedStop.value, transformedLineId.value);
+    const { getLastTrainTimes } = useTrainTimes();
+    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
     if (response) {
       trainTimes.value = response; // Stocker les résultats
       console.log("Horaires des derniers trains :", trainTimes.value);

@@ -56,7 +56,8 @@
   };
 
   onMounted(async () => {
-    lignes.value = await useLines();
+    const { getLocalLines } = useLines()
+    lignes.value = await getLocalLines()
     console.log("Lignes chargées :", lignes.value);
   });
 </script>

@@ -43,6 +43,7 @@
 
   watch(() => props.selectedLine, async (newLineId) => {
       if (newLineId) {
+        const { getDirections } = useDirections();
         console.log("Appel de getDirections avec la ligne :", newLineId.name);
         const { directions: fetchedDirections } = await getDirections(newLineId);
         directions.value = fetchedDirections;
