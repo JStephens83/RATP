@@ -6,7 +6,7 @@
         <li
           v-for="direction in directions"
           :key="direction.id"
-          :class="{ selected: selectedDirection }"
+          :class="{ selected: selectedDirection && selectedDirection.id === direction.id }"
           @click="selectDirection(direction)"
         >
           {{ direction.name }}

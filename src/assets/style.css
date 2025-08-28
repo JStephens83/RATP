@@ -40,6 +40,7 @@ ul {
   margin: 20vh 0 10vh 0;
 }
 
+<<<<<<< Updated upstream
 .loading {
   display: flex;
   justify-content: center;
@@ -74,3 +75,11 @@ ul {
     transform: translateX(100%);
   }
 }
+=======
+.selected {
+  outline: 4px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+>>>>>>> Stashed changes
