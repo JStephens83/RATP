@@ -42,12 +42,8 @@
     () => props.selectedLine, 
     async (newLineId) => {
       if (newLineId) {
-<<<<<<< HEAD
-        // console.log("Appel de getDirections avec la ligne :", newLineId.name);
-=======
         const { getDirections } = useDirections();
         console.log("Appel de getDirections avec la ligne :", newLineId.name);
->>>>>>> composables
         const { directions: fetchedDirections } = await getDirections(newLineId);
         directions.value = fetchedDirections;
         // console.log("Directions récupérées :", directions.value);
