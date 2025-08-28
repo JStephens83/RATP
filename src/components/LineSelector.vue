@@ -26,8 +26,9 @@
 
 <script setup>
   // API Diffusion des données du référentiel des lignes - ILICO : https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ilico
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, watch } from "vue";
   import { useLines } from "../composables/api/useLines";
+  import { useAutoScroll } from "../composables/useAutoScroll";
 
   const lignes = ref([]);
   const selectedLine = ref(null);

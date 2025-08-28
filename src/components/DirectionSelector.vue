@@ -24,6 +24,7 @@
   // https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_globale
   import { ref, watch } from "vue";
   import { useDirections } from "../composables/api/useDirections";
+  import { useAutoScroll } from "../composables/useAutoScroll";
 
   // Réception de la ligne sélectionnée depuis Homeview.vue
   const props = defineProps({
@@ -81,9 +82,5 @@
     min-width: 10vw;
     text-align: center;
     transition: 0.3s;
-  }
-
-  ul.direction-list > li:hover {
-    box-shadow: 2px 2px 2px #000;
   }
 </style>

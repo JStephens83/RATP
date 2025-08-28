@@ -79,12 +79,4 @@
     text-align: center;
     transition: 0.3s;
   }
-  .stop-list li.selected {
-    background: #64B5F6;
-    color: #292092;
-    font-weight: bold;
-  }
-  .stop-list li:hover {
-    box-shadow: 2px 2px 2px #000;
-  }
 </style>

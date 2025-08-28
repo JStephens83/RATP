@@ -41,8 +41,18 @@ ul {
 }
 
 .selected {
-  outline: 4px solid #fff;
+  outline: 0.2rem solid #fff;
   outline-offset: 2px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
   transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.stop-list li.selected, ul.direction-list > li.selected {
+  background: #64B5F6;
+  color: #292092;
+  font-weight: bold;
+}
+
+.stop-list li:hover, ul.direction-list > li:hover{
+  box-shadow: 2px 2px 2px #000;
 }
