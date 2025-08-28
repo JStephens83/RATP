@@ -10,18 +10,13 @@ body {
     #64B5F6
   );
   background-size: 400% 400%;
-  animation: scrollColors 20s linear infinite;
+  animation: scrollColors 20s linear infinite alternate;
   color: #fff;
 }
 
-/* Animation pour faire défiler les couleurs */
 @keyframes scrollColors {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 .station {
@@ -47,7 +42,7 @@ ul {
   transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }
 
-.stop-list li.selected, ul.direction-list > li.selected {
+div > ul.stop-list > li.selected, div > ul.direction-list > li.selected {
   background: #64B5F6;
   color: #292092;
   font-weight: bold;
@@ -55,4 +50,26 @@ ul {
 
 .stop-list li:hover, ul.direction-list > li:hover{
   box-shadow: 2px 2px 2px #000;
+}
+
+@keyframes heartbeatFade {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  50%  { opacity: 0; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.loading-container {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.loading > span {
+  animation: heartbeatFade 2s ease-in-out infinite;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  font-size: 2rem;
 }

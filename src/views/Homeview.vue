@@ -7,6 +7,7 @@
     <div v-if="isLoadingDirections">
       <p class="loading"><span>Chargement des directions...</span></p>
     </div>
+
     <DirectionSelector
       v-if="selectedLine && !isLoadingDirections"
       :selectedLine="selectedLine"
@@ -14,18 +15,20 @@
       @directionSelected="handleDirectionSelection"
     />
 
-    <div v-if="isLoading">
-      <p class="loading">Chargement des arrêts...</p>
+    <div v-if="isLoadingStops">
+      <p class="loading"><span>Chargement des arrêts...</span></p>
     </div>
+
     <StopSelector 
       v-if="selectedDirection" 
       :stops="stops" 
       @stopSelected="handleStopSelection" 
     />
 
-    <div v-if="isLoading">
-      <p class="loading">Chargement des horaires...</p>
+    <div v-if="isLoadingSchedules">
+      <p class="loading"><span>Chargement des horaires...</span></p>
     </div>
+
     <TrainSchedule 
       v-if="trainTimes.length > 0"
       :trainTimes="trainTimes"
@@ -49,10 +52,11 @@
   const selectedStopName = ref(null);
   const transformedLineId = ref(null);
   const trainTimes = ref([]);
-  const isLoading = ref(false);
+  // const isLoading = ref(false);
   const directions = ref([]);
   const isLoadingDirections = ref(false);
   const isLoadingStops = ref(false);
+  const isLoadingSchedules = ref(false);
 
   // GESTION SÉLECTION LIGNE:
   const handleLineSelection = async (line) => {
@@ -88,17 +92,12 @@
     console.log("IDs disponibles :", stops.value.map(s => [s.id, typeof s.id]));
     // Vérification si stopId se trouve dans filteredStops
     const matchingStop = stops.value.find(stop => stop.id === stopId);
-
-    if (matchingStop) {
-      // Si une correspondance est trouvée, récupération du nom de l'arrêt
-      selectedStopName.value = matchingStop.name;
-      // console.log("Nom de l'arrêt sélectionné :", selectedStopName.value);
-    } else {
-      // Si pas de correspondance
-      selectedStopName.value = "Nom inconnu";
-      // console.log("Aucune correspondance trouvée pour l'arrêt sélectionné.");
-    }
-
+    
+    // Si une correspondance est trouvée, récupération du nom de l'arrêt sinon "Nom inconnu"
+    selectedStopName.value = matchingStop ? matchingStop.name : "Nom inconnu";
+    // console.log("Nom de l'arrêt sélectionné :", selectedStopName.value);
+    // console.log("Aucune correspondance trouvée pour l'arrêt sélectionné.");
+    
     // Mise à jour de l'arrêt sélectionné
     selectedStop.value = stopId;
     
@@ -106,7 +105,7 @@
     trainTimes.value = [];
 
     // Affichage message de chargement
-    isLoading.value = true;
+    isLoadingSchedules.value = true;
     
     // Récupération des horaires
     const { getLastTrainTimes } = useTrainTimes();
@@ -117,7 +116,7 @@
     }
 
     // Masquer le message de chargement
-    isLoading.value = false;
+    isLoadingSchedules.value = false;
   };
 
   // GESTION RÉCUPÉRATION DES HORAIRES:

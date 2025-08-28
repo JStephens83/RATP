@@ -13,9 +13,6 @@
         </li>
       </ul>
     </div>
-    <div v-else>
-      <p class="loading">Chargement des arrêts...</p>
-    </div>
   </div>
 </template>
 

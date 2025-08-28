@@ -72,12 +72,12 @@
     height: 5vw;
     align-items: center;
     justify-content: center;
-    font-size: 2.1rem;
+    font-size: 2vw;
     font-weight: bold;
     transition: 0.3s;
   }
+
   ul.line-list>li:hover {
-    /* Ajouter animation */
     box-shadow: 2px 2px 2px #000;
   }
 </style>

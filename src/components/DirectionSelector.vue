@@ -13,9 +13,6 @@
         </li>
       </ul>
     </div>
-    <div v-else>
-      <p class="loading">Chargement des directions...</p>
-    </div>
   </div>
 </template>
 
