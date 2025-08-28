@@ -2,7 +2,7 @@
   <div>
     <div v-if="lignes.length > 0">
       <h2 class="list-labels">Sélectionnez une ligne</h2>
-      <ul class="line-list">
+      <ul class="line-list"  ref="scrollTarget">
         <li
           v-for="ligne in lignes"
           :key="ligne.id"
@@ -13,15 +13,6 @@
           {{ ligne.name }}
         </li>
       </ul>
-    <!-- <select 
-      id="line" 
-      v-model="selectedLine" 
-      @change="handleLineChange"
-    >
-      <option v-for="ligne in lignes" :key="ligne.id" :value="ligne">
-        {{ ligne.name }}
-      </option>
-    </select> -->
     </div>
     <div v-else>
       <p class="loading"
@@ -35,20 +26,17 @@
 
 <script setup>
   // API Diffusion des données du référentiel des lignes - ILICO : https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ilico
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, watch } from "vue";
   import { getLines } from "../services/ratpService";
+  import { useAutoScroll } from "../composables/useAutoScroll";
+
 
   const lignes = ref([]);
   const selectedLine = ref(null);
+  const { scrollTarget, triggerScroll } = useAutoScroll();
 
   // Vérification de l'emit:
   const emit = defineEmits(["lineSelected"]);
-
-  // va avec le select/option:
-  // const handleLineChange = () => {
-  //   console.log("Valeur de selectedLine dans LineSelector :", selectedLine.value);
-  //   emit("lineSelected", selectedLine.value); // Emit de la valeur sélectionnée
-  // };
 
   const selectLine = (ligne) => {
     selectedLine.value = ligne;
@@ -57,8 +45,17 @@
 
   onMounted(async () => {
     lignes.value = await getLines();
-    console.log("Lignes chargées :", lignes.value);
+    // console.log("Lignes chargées :", lignes.value);
   });
+
+  watch(
+    lignes,
+    async (newVal) => {
+      if (newVal.length > 0) {
+        await triggerScroll(true);
+      }
+    }
+  );
 </script>
 
 <style scoped>

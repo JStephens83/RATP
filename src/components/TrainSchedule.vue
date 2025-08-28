@@ -1,23 +1,30 @@
 <template>
-  <div>
-    <h2 class="list-labels">Horaires des derniers trains</h2>
-    <ul v-if="trainTimes.length > 0">
-      <p>Prochains horaires :</p>
+  <div class="train-schedule">
+    <h2 class="list-labels">Horaires des prochains trains</h2>
+    <ul v-if="trainTimes.length > 0" ref="scrollTarget" class="time-list">
       <li v-for="(train, index) in trainTimes" :key="index">
         {{ formatTime(train.time) }} - {{ calculateTimeDifference(train.time) }} 
       </li>
     </ul>
-    <p v-else>Aucun horaire disponible.</p>
+    <div v-else class="loading">
+      <p>Chargement des horaires...</p>
+    </div>
+    <!-- <p v-else-if="trainTimes.length === 0">Aucun horaire disponible.</p> -->
   </div>
 </template>
 
 <script setup>
+  import { watch } from "vue";
+  import { useAutoScroll } from "../composables/useAutoScroll";
+
   const props = defineProps({
     trainTimes: {
       type: Array,
       required: true,
     },
   });
+  
+  const { scrollTarget, triggerScroll } = useAutoScroll();
 
   // Formatage des horaires
   const formatTime = (time) => {
@@ -40,4 +47,38 @@
 
     return `Arrive dans ${minutes} min ${seconds} sec`;
   };
+
+  watch(
+    () => props.trainTimes,
+    async (newVal) => {
+      if (newVal.length > 0) {
+        await triggerScroll(true);
+      }
+    },
+    { immediate: true }
+  );
 </script>
+<style scoped>
+  .train-schedule div>p {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 10vh 0 10vh 0;
+  }
+  .time-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .time-list li, .time-list p {
+    list-style-type: none;
+    padding: 1em;
+    margin: 0.5em;
+    color : #fff;font-size: 1.5rem;
+    min-width: 10vw;
+    text-align: center;
+    transition: 0.3s;
+  }
+</style>

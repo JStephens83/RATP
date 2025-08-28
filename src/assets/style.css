@@ -3,23 +3,24 @@ body {
   font-family: "Fjalla One",  Arial, sans-serif;
   font-weight: 400;
   font-style: normal;
-  background: linear-gradient(135deg, 
-    #64B5F6,  /* Bleu clair */
-    #050D9E,  /* Bleu foncé */
-    #00AB91   /* Vert */
+  background: linear-gradient(270deg, 
+    #64B5F6,
+    #050D9E,
+    #00AB91,
+    #64B5F6
   );
-  background-size: 300% 300%; /* Augmenter la taille pour permettre le défilement */
-  animation: scrollColors 10s linear infinite; /* Animation infinie */
+  background-size: 400% 400%;
+  animation: scrollColors 20s linear infinite;
   color: #fff;
 }
 
 /* Animation pour faire défiler les couleurs */
 @keyframes scrollColors {
   0% {
-    background-position: 0% 0%;
+    background-position: 0% 50%;
   }
   100% {
-    background-position: 100% 0%;
+    background-position: 100% 50%;
   }
 }
 
@@ -32,11 +33,16 @@ ul {
   padding: 0;
 }
 
-
-
 .list-labels {
   display: block;
   text-align: center;
   font-size: 2rem;
   margin: 20vh 0 10vh 0;
+}
+
+.selected {
+  outline: 4px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }

@@ -3,7 +3,6 @@ import linesData from "../assets/lines.json";
 import stopsData from "../assets/arrets-lignes.json";
 
 const API_KEY = import.meta.env.VITE_RATP_API_KEY;
-// const API_BASE_URL_LINES = "/api/marketplace/ilico/getData?method=getlc&format=json&TransportMode=metro";
 const API_BASE_URL_TIMES = "/api/marketplace/estimated-timetable";
 const API_BASE_URL_STOPS = "api/marketplace/stop-monitoring?";
 const API_BASE_URL_STOP_NAMES = "api/marketplace/icar/getData?idrefa=463181&format=json&GeneralGroupOfEntities=false&multimodalStopPlace=false&monomodalStopPlace=true&Quay_FR1=true&Quay_LOC=true&StopPlaceEntrance=false&destinations=true&TransportMode=metro";
@@ -16,39 +15,15 @@ export const getLines = async () => {
     id: line.id,
     color: "#" + line.Presentation.Colour,
     textColor: "#" + line.Presentation.TextColour,
-  }));; 
+  }));
 };
-
-//////////////////////////////////////////
-// Fonction officielle:
-// export const getLines = async () => {
-//   try {
-//     const response = await axios.get(`${API_BASE_URL_LINES}`, {
-//       headers: { 
-//         "apikey": API_KEY,
-//         "Accept": "application/json"
-//       }
-//     });
-//     console.log("Réponse API :", response.data);
-
-//     return response.data.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line.map(line => ({
-//       name: line.ShortName,
-//       id: line.id,
-//     }));
-//   }
-//    catch (error) {
-//     console.error("Erreur lors de la récupération des lignes :", error.response?.data || error.message);
-//     return [];
-//   }
-// };
-//////////////////////////////////////////
 
 // Récup données + Comparaison id arrêt <=> nom arret :
 export const fetchStopsFromOpenData = async () => {
   try {
-    console.log("Données stops : ", stopsData);
+    // console.log("Données stops : ", stopsData);
     const metroStops = stopsData.filter(item => item.mode === "Metro");
-    console.log("Arrêts filtrés (mode Métro) :", metroStops);
+    // console.log("Arrêts filtrés (mode Métro) :", metroStops);
  
     // Mapping entre  IDs des arrêts et leurs noms + Association stop_id à stop_name
     const stopMapping = metroStops.reduce((acc, item) => {
@@ -56,7 +31,7 @@ export const fetchStopsFromOpenData = async () => {
       return acc;
     }, {});
 
-    console.log("Mapping des arrêts depuis fetchStopsFromOpenData:", stopMapping);
+    // console.log("Mapping des arrêts depuis fetchStopsFromOpenData:", stopMapping);
     return stopMapping;
 
   } catch (error) {
@@ -69,7 +44,7 @@ export const fetchStopsFromOpenData = async () => {
 export const getDirections = async (lineId) => {
   try {
     const transformedLineId = lineId.id.replace("FR1:Line:", "STIF:Line::");
-    console.log("ID transformé :", transformedLineId);
+    // console.log("ID transformé :", transformedLineId);
     
     const response = await axios.get(`${API_BASE_URL_TIMES}`, {
       headers: { 
@@ -78,11 +53,11 @@ export const getDirections = async (lineId) => {
       },
       params: { LineRef: transformedLineId }
     });
-    console.log("Réponse API directions :", response.data);
+    // console.log("Réponse API directions :", response.data);
 
     // Extraction des directions
     const vehicleJourneys = response.data?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]?.EstimatedJourneyVersionFrame?.[0]?.EstimatedVehicleJourney;
-    console.log("vehicleJourneys :", vehicleJourneys)
+    // console.log("vehicleJourneys :", vehicleJourneys)
 
     if (!vehicleJourneys || !Array.isArray(vehicleJourneys)) {
       console.warn("Aucune donnée trouvée pour les directions.");
@@ -91,7 +66,7 @@ export const getDirections = async (lineId) => {
     
     // Appel fetchStopsFromOpenData pour récupérer stopMapping
     const stopMapping = await fetchStopsFromOpenData();
-    console.log("Mapping des arrêts dans getDirections:", stopMapping);
+    // console.log("Mapping des arrêts dans getDirections:", stopMapping);
 
     // EXTRACTION des STOPPOINTREF dans vehicleJourneys et suppression doublons : 
     const stopPointRefs = vehicleJourneys
@@ -103,7 +78,7 @@ export const getDirections = async (lineId) => {
       })
       .filter((value, index, self) => value && self.indexOf(value) === index); 
 
-    console.log("StopPointRef extraits :", stopPointRefs);
+    // console.log("StopPointRef extraits :", stopPointRefs);
     
     // Récup des IDs des stopPointRef pour comparaison:
     const filteredStops = stopPointRefs
@@ -131,7 +106,7 @@ export const getDirections = async (lineId) => {
         index === self.findIndex(s => s.name === stop.name) 
       );
 
-    console.log("Arrêts correspondants entre stopPointRefs & stopMapping:", filteredStops);
+    // console.log("Arrêts correspondants entre stopPointRefs & stopMapping:", filteredStops);
     
     // EXTRACTION des noms des DIRECTIONS et suppression doublons
     const directions = vehicleJourneys
@@ -165,7 +140,7 @@ export const fetchStops = async () => {
     });
 
     // console.log("réponse fetchStops",JSON.stringify(response.data, null, 2)); // Affiche les données formatées
-    console.dir('response fetchStop()', response.data, { depth: null });
+    // console.dir('response fetchStop()', response.data, { depth: null });
     return response.data
   } catch (error) {
     console.error("Erreur lors de la récupération des infos des arrêts :", error); 
@@ -190,8 +165,8 @@ export const getLastTrainTimes = async (selectedStop, transformedLineId) => {
       }
     });
 
-    console.log("URL API derniers trains :", response);
-    console.log("Réponse API derniers trains :", response.data);
+    // console.log("URL API derniers trains :", response);
+    // console.log("Réponse API derniers trains :", response.data);
     
     // Extraction horaires derniers trains
     const monitoredStopVisits = response.data?.Siri?.ServiceDelivery?.StopMonitoringDelivery?.[0]?.MonitoredStopVisit;
@@ -207,7 +182,7 @@ export const getLastTrainTimes = async (selectedStop, transformedLineId) => {
       return expectedArrivalTime ? { time: expectedArrivalTime } : null;
     }).filter(item => item !== null);
 
-    console.log("Horaires des derniers trains extraits :", trainTimes);
+    // console.log("Horaires des derniers trains extraits :", trainTimes);
     return trainTimes;
 
   } catch (error) {
