@@ -8,6 +8,7 @@ const API_BASE_URL_STOPS = "api/marketplace/stop-monitoring?";
 const API_BASE_URL_STOP_NAMES = "api/marketplace/icar/getData?idrefa=463181&format=json&GeneralGroupOfEntities=false&multimodalStopPlace=false&monomodalStopPlace=true&Quay_FR1=true&Quay_LOC=true&StopPlaceEntrance=false&destinations=true&TransportMode=metro";
 
 // Données locales :
+// RECUPERATION DES LIGNES:
 export const getLines = async () => {
   console.log("Données lignes: ", linesData.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line)
   return linesData.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line.map(line => ({
@@ -18,7 +19,31 @@ export const getLines = async () => {
   }));
 };
 
-// Récup données + Comparaison id arrêt <=> nom arret :
+//////////////////////////////////////////
+// Fonction officielle:
+// export const getLines = async () => {
+//   try {
+//     const response = await axios.get(`${API_BASE_URL_LINES}`, {
+//       headers: { 
+//         "apikey": API_KEY,
+//         "Accept": "application/json"
+//       }
+//     });
+//     console.log("Réponse API :", response.data);
+
+//     return response.data.dataObjects.CompositeFrame.frames.GeneralFrame[1].members.Line.map(line => ({
+//       name: line.ShortName,
+//       id: line.id,
+//     }));
+//   }
+//    catch (error) {
+//     console.error("Erreur lors de la récupération des lignes :", error.response?.data || error.message);
+//     return [];
+//   }
+// };
+//////////////////////////////////////////
+
+// Récup données + Association id arrêt <=> nom arret :
 export const fetchStopsFromOpenData = async () => {
   try {
     // console.log("Données stops : ", stopsData);
@@ -40,7 +65,7 @@ export const fetchStopsFromOpenData = async () => {
   }
 };
 
-// Récup des directions
+// RECUPERATION DES DIRECTIONS:
 export const getDirections = async (lineId) => {
   try {
     const transformedLineId = lineId.id.replace("FR1:Line:", "STIF:Line::");
@@ -129,7 +154,7 @@ export const getDirections = async (lineId) => {
   }
 };
 
-// Récupération des arrêts
+// RECUPERATION DES ARRETS:
 export const fetchStops = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL_STOP_NAMES}`, {
@@ -148,7 +173,7 @@ export const fetchStops = async () => {
   }
 }
 
-// Récupération des horaires
+// RECUPERATION DES HORAIRES:
 export const getLastTrainTimes = async (selectedStop, transformedLineId) => {
   try {
     const stopId = selectedStop.replace("IDFM:", "STIF:StopPoint:Q:") + ":";

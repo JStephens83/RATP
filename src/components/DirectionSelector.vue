@@ -23,8 +23,7 @@
   // API Prochains passages - requête globale
   // https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_globale
   import { ref, watch } from "vue";
-  import { getDirections } from "../services/ratpService";
-  import { useAutoScroll } from "../composables/useAutoScroll";
+  import { useDirections } from "../composables/api/useDirections";
 
   // Réception de la ligne sélectionnée depuis Homeview.vue
   const props = defineProps({
@@ -43,7 +42,12 @@
     () => props.selectedLine, 
     async (newLineId) => {
       if (newLineId) {
+<<<<<<< HEAD
         // console.log("Appel de getDirections avec la ligne :", newLineId.name);
+=======
+        const { getDirections } = useDirections();
+        console.log("Appel de getDirections avec la ligne :", newLineId.name);
+>>>>>>> composables
         const { directions: fetchedDirections } = await getDirections(newLineId);
         directions.value = fetchedDirections;
         // console.log("Directions récupérées :", directions.value);

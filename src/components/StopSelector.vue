@@ -43,6 +43,7 @@
 
   // Emit arrêt sélectionné
   const selectStop = (stopId) => {
+    console.log("stopId dans selectStop :", stopId);
     selectedStop.value = stopId;
     emit("stopSelected", stopId);
   };
