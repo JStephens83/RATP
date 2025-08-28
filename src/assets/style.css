@@ -40,46 +40,9 @@ ul {
   margin: 20vh 0 10vh 0;
 }
 
-<<<<<<< Updated upstream
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-}
-.train {
-  /* width: 33vw;  */
-  margin: 0 auto;
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
-  /* background: #eee;
-  color: #292092; */
-  border-radius: 1em;
-  padding: 1em 2em;
-  box-sizing: border-box;
-  text-align: left;
-}
-
-.train span {
-  display: inline-block;
-  padding-left: 100%; /* Commence hors de la zone visible */
-  animation: loading-marquee 6s linear infinite;
-}
-
-@keyframes loading-marquee {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-=======
 .selected {
   outline: 4px solid #fff;
   outline-offset: 2px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
   transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }
->>>>>>> Stashed changes
