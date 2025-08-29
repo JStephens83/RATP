@@ -82,8 +82,8 @@ Si vous avez une proposition ou repérez un bug, vous pouvez l’indiquer via le
 
 ## 📄 Licence
 
-Ce projet est sous licence **MIT**.  
-Vous êtes libres de l’utiliser, le modifier et le redistribuer, à condition de conserver l’attribution à l’auteur original.
+Ce projet est distribué sous licence **Non Commerciale**.  
+Consultez le fichier LICENSE.md(./LICENSE.md) pour les conditions complètes.
 
 ---
 

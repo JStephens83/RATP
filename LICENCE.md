@@ -1,4 +1,4 @@
-Copyright (c) [2025] [JStephens83]
+Copyright (c) 2025 JStephens83
 
 Permission est accordée, gratuitement, à toute personne obtenant une copie de ce logiciel et des fichiers de documentation associés (le « Logiciel »), de l'utiliser, le copier, le modifier et le distribuer, sous réserve des conditions suivantes :
 
