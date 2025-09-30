@@ -16,11 +16,13 @@ export function useTrainTimes() {
       });
 
       const monitoredStopVisits = response.data?.Siri?.ServiceDelivery?.StopMonitoringDelivery?.[0]?.MonitoredStopVisit;
+      console.log("monitoredStopVisits", response.data?.Siri?.ServiceDelivery?.StopMonitoringDelivery);
       if (!monitoredStopVisits || !Array.isArray(monitoredStopVisits)) return [];
 
       return monitoredStopVisits
         .map(visit => {
           const time = visit?.MonitoredVehicleJourney?.MonitoredCall?.ExpectedArrivalTime;
+          console.log("Heure d'arrivée prévue :", time);
           return time ? { time } : null;
         })
         .filter(Boolean);
