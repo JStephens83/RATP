@@ -11,7 +11,7 @@ async function importFileToCollection(fileName, collectionName, batchSize = 5000
   // Suppression des index existants pour accélérer l'import
   try {
     await collection.dropIndexes();
-    console.log(`ndex supprimés sur ${collectionName}`);
+    console.log(`Index supprimés sur ${collectionName}`);
   } catch (e) {
     if (e.codeName !== "IndexNotFound") console.warn(e.message);
   }
