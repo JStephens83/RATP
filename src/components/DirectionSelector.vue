@@ -44,7 +44,7 @@
         console.log("Appel de getDirections avec la ligne :", newLineId.name);
         const { directions: fetchedDirections } = await getDirections(newLineId);
         directions.value = fetchedDirections;
-        // console.log("Directions récupérées :", directions.value);
+        console.log("Directions récupérées :", directions.value);
         // console.log("Arrêts récupérés dans DirectionSelector.vue :", stops.value);
         await triggerScroll(true);
       }

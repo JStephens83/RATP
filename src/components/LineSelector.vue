@@ -39,6 +39,7 @@
 
   const selectLine = (ligne) => {
     selectedLine.value = ligne;
+    console.log("ligne séléctionnée :", ligne);
     emit("lineSelected", ligne);
   };
 
