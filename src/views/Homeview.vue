@@ -25,6 +25,15 @@
       @stopSelected="handleStopSelection" 
     />
 
+    <div v-if="selectedStop">
+      <label>Choisir l'affichage</label>
+      <select v-model="scheduleMode">
+        <option value="next">Voir les PROCHAINS trains</option>
+        <option value="last">Voir les DERNIERS trains</option>
+      </select>
+    </div>
+
+
     <div v-if="isLoadingSchedules">
       <p class="loading"><span>Chargement des horaires...</span></p>
     </div>
@@ -52,7 +61,7 @@
   const selectedStopName = ref(null);
   const transformedLineId = ref(null);
   const trainTimes = ref([]);
-  // const isLoading = ref(false);
+  const scheduleMode = ref('next');
   const directions = ref([]);
   const isLoadingDirections = ref(false);
   const isLoadingStops = ref(false);
@@ -108,8 +117,16 @@
     isLoadingSchedules.value = true;
     
     // Récupération des horaires
-    const { getLastTrainTimes } = useTrainTimes();
-    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+    const { getNextTrainTimes, getLastTrainTimes } = useTrainTimes();
+    let response;
+
+    // Choix entre prochains ou derniers trains
+    if (scheduleMode.value === "last") {
+      response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+    } else {
+      response = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
+    }
+
     if (response) {
       trainTimes.value = response;
       // console.log("Horaires des derniers trains :", trainTimes.value);
@@ -131,8 +148,8 @@
 
     console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
 
-    const { getLastTrainTimes } = useTrainTimes();
-    const response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+    const { getNextTrainTimes } = useTrainTimes();
+    const response = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
     if (response) {
       trainTimes.value = response; // Stocker les résultats
       console.log("Horaires des derniers trains :", trainTimes.value);

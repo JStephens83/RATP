@@ -4,7 +4,7 @@ const API_BASE_URL_STOPS = "api/marketplace/stop-monitoring?";
 
 export function useTrainTimes() {
 
-  const getLastTrainTimes = async (selectedStop, transformedLineId) => {
+  const getNextTrainTimes = async (selectedStop, transformedLineId) => {
     try {
       const stopId = selectedStop.replace("IDFM:", "STIF:StopPoint:Q:") + ":";
 
@@ -33,5 +33,8 @@ export function useTrainTimes() {
     }
   };
 
-  return { getLastTrainTimes };
+  return { 
+    getNextTrainTimes,
+    getLastTrainTimes  
+  };
 }
