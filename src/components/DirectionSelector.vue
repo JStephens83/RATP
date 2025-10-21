@@ -1,3 +1,4 @@
+<!-- 3. Composant d'affichage et de sélection des directions -->
 <template>
   <div>
     <div v-if="directions.length > 0">
@@ -23,7 +24,7 @@
   import { useDirections } from "../composables/api/useDirections";
   import { useAutoScroll } from "../composables/useAutoScroll";
 
-  // Réception de la ligne sélectionnée depuis Homeview.vue
+  // Réception de la ligne sélectionnée depuis Homeview.vue / LineSelector.vue
   const props = defineProps({
     selectedLine: {
       type: Object,
@@ -59,6 +60,7 @@
   // Emit de la direction sélectionnée   
   const selectDirection = (direction) => {
     selectedDirection.value = direction;
+    console.log("Direction sélectionnée :", selectedDirection.value);
     emit("directionSelected", direction);
   };
 </script>

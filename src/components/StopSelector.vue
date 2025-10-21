@@ -1,3 +1,4 @@
+<!-- Composant d'affichage et de sélection des arrêts de métro -->
 <template>
   <div>
     <div v-if="props.stops.length > 0">
@@ -26,14 +27,14 @@
   const selectedStop = ref(null);
   const { scrollTarget, triggerScroll } = useAutoScroll();
 
-  // Prop pour reception des arrêts depuis DirectionSelector.vue
+  // Réception des arrêts depuis Homeview.vue / useDirections.js
   const props = defineProps({
     stops: {
       type: Array,
       required: true,
     },
   });
-  // console.log("Arrêts reçus dans StopSelector :", props.stops);
+  console.log("Arrêts reçus dans StopSelector :", props.stops);
 
   // Déclaration événement "stopSelected"
   const emit = defineEmits(["stopSelected"]);
@@ -44,7 +45,7 @@
     selectedStop.value = stopId;
     emit("stopSelected", stopId);
   };
-  // console.log("Arrêt sélectionné :", selectedStop.value);
+  console.log("Arrêt sélectionné :", selectedStop.value);
   
   watch(
     () => props.stops,

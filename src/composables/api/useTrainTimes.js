@@ -1,6 +1,6 @@
 import { axiosClient } from "../../composables/api/utils/axiosClient";
 
-const API_BASE_URL_STOPS = "api/marketplace/stop-monitoring?";
+const API_BASE_URL_STOPS = "idfm/marketplace/stop-monitoring?";
 
 export function useTrainTimes() {
 

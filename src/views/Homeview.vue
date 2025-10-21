@@ -20,7 +20,7 @@
     </div>
 
     <StopSelector 
-      v-if="selectedDirection" 
+      v-if="selectedDirection && stops.length > 0" 
       :stops="stops" 
       @stopSelected="handleStopSelection" 
     />
@@ -53,6 +53,7 @@
   import DirectionSelector from "../components/DirectionSelector.vue";
   import StopSelector from "../components/StopSelector.vue";
   import TrainSchedule from "../components/TrainSchedule.vue";
+  import { useStops} from "../composables/api/useStops.js"
 
   const selectedLine = ref(null);
   const selectedDirection = ref(null);
@@ -66,6 +67,7 @@
   const isLoadingDirections = ref(false);
   const isLoadingStops = ref(false);
   const isLoadingSchedules = ref(false);
+  const { getStopsFromBackend } = useStops();
 
   // GESTION SÉLECTION LIGNE:
   const handleLineSelection = async (line) => {
@@ -81,6 +83,8 @@
     const { getDirections } = useDirections();
     const { stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
     stops.value = fetchedStops;
+    console.log("Arrêts récupérés dans handleLineSelection :", stops.value);
+
     transformedLineId.value = lineId;
 
     isLoadingDirections.value = false;
@@ -90,9 +94,23 @@
   };
 
   // GESTION SÉLECTION DIRECTION:
-  const handleDirectionSelection = (direction) => {
+  const handleDirectionSelection = async (direction) => {
     selectedDirection.value = direction;
-    // console.log("Direction sélectionnée :", direction);
+    console.log("Direction sélectionnée ds homeview:", direction);
+
+    // Une fois la direction sélectionnée, on récupère les arrets en db
+    stops.value = [];
+    trainTimes.value = [];
+    selectedStop.value = null;
+    selectedStopName.value = null;
+    isLoadingStops.value = true;
+
+    const fetchedStops = await getStopsFromBackend(transformedLineId.value, direction.id);
+    stops.value = fetchedStops;
+
+    isLoadingStops.value = false;
+
+    console.log("Arrêts récupérés depuis le backend :", stops.value);
   };
 
   // GESTION SÉLECTION ARRÊT:
