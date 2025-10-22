@@ -58,6 +58,7 @@
     { immediate: true }
   );
 </script>
+
 <style scoped>
   .train-schedule div>p {
     display: block;

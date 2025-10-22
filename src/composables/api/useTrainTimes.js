@@ -36,8 +36,28 @@ export function useTrainTimes() {
     }
   };
 
+  const getLastTrainTimes = async (selectedStop, transformedLineId) => {
+    try {
+      const stopId = selectedStop.replace("IDFM:", "STIF:StopPoint:Q:") + ":";
+      const ligneIdTrainTimes = transformedLineId.replace("IDFM:", "STIF:Line::") + ":";
+      console.log("ligneIdTrainTimes", ligneIdTrainTimes);
+
+      const response = await axiosClient.get(API_BASE_URL_STOPS, {
+        params: {
+          MonitoringRef: stopId,
+          LineRef: ligneIdTrainTimes
+        }
+      });
+
+   
+    } catch (error) {
+      console.error("Erreur lors de la récupération des horaires :", error);
+      return [];
+    }
+  };
+
   return { 
     getNextTrainTimes,
-    // getLastTrainTimes  
+    getLastTrainTimes  
   };
 }

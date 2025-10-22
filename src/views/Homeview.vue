@@ -26,11 +26,19 @@
     />
 
     <div v-if="selectedStop">
-      <label>Choisir l'affichage</label>
-      <select v-model="scheduleMode">
-        <option value="next">Voir les PROCHAINS trains</option>
-        <option value="last">Voir les DERNIERS trains</option>
-      </select>
+      <!-- <label>Choisir l'affichage</label> -->
+      <div>
+        <button 
+          @click="scheduleMode = 'next'"
+          :class="{ active: scheduleMode === 'next' }">
+          Voir les PROCHAINS trains
+        </button>
+        <button 
+          @click="scheduleMode = 'last'"
+          :class="{ active: scheduleMode === 'last' }">
+          Voir les DERNIERS trains
+        </button>
+      </div>
     </div>
 
 
@@ -46,7 +54,7 @@
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { ref, watch } from "vue";
   import { useDirections } from "../composables/api/useDirections";
   import { useTrainTimes } from "../composables/api/useTrainTimes";
   import LineSelector from "../components/LineSelector.vue";
@@ -62,12 +70,13 @@
   const selectedStopName = ref(null);
   const transformedLineId = ref(null);
   const trainTimes = ref([]);
-  const scheduleMode = ref('next');
+  const scheduleMode = ref('');
   const directions = ref([]);
   const isLoadingDirections = ref(false);
   const isLoadingStops = ref(false);
   const isLoadingSchedules = ref(false);
   const { getStopsFromBackend } = useStops();
+  const { getNextTrainTimes } = useTrainTimes();
 
   // GESTION SÉLECTION LIGNE:
   const handleLineSelection = async (line) => {
@@ -132,45 +141,65 @@
     trainTimes.value = [];
 
     // Affichage message de chargement
-    isLoadingSchedules.value = true;
+    // isLoadingSchedules.value = true;
     
-    // Récupération des horaires
-    const { getNextTrainTimes, getLastTrainTimes } = useTrainTimes();
-    let response;
+    // // Récupération des horaires
+    // const { getNextTrainTimes, getLastTrainTimes } = useTrainTimes();
+    // let response;
 
-    // Choix entre prochains ou derniers trains
-    if (scheduleMode.value === "last") {
-      response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
-    } else {
-      response = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
-    }
+    // // Choix entre prochains ou derniers trains
+    // if (scheduleMode.value === "last") {
+    //   response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+    // } else {
+    //   response = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
+    // }
 
-    if (response) {
-      trainTimes.value = response;
-      // console.log("Horaires des derniers trains :", trainTimes.value);
-    }
+    // if (response) {
+    //   trainTimes.value = response;
+    //   // console.log("Horaires des derniers trains :", trainTimes.value);
+    // }
 
-    // Masquer le message de chargement
-    isLoadingSchedules.value = false;
+    // // Masquer le message de chargement
+    // isLoadingSchedules.value = false;
   };
+
+  // CHOIX DU MODE D'AFFICHAGE:
+  watch(scheduleMode, async (mode) => {
+    if(!mode || !selectedStop.value) return;
+
+    isLoadingSchedules.value = true;
+
+    try {
+      if (mode === "next") {
+        trainTimes.value = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
+      } else {
+        trainTimes.value = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des horaires :", error);
+      trainTimes.value = [];
+    } finally {
+      isLoadingSchedules.value = false;
+    }
+  });
 
   // GESTION RÉCUPÉRATION DES HORAIRES:
-  const fetchTrainTimes = async () => {
-    console.log("Valeur de selectedStop :", selectedStop.value);
-    console.log("Valeur de transformedLineId :", transformedLineId.value);
+  // const fetchTrainTimes = async () => {
+  //   console.log("Valeur de selectedStop :", selectedStop.value);
+  //   console.log("Valeur de transformedLineId :", transformedLineId.value);
 
-    if (!selectedStop.value || !transformedLineId.value) {
-      console.warn("Arrêt ou ligne non sélectionné !");
-      return;
-    }
+  //   if (!selectedStop.value || !transformedLineId.value) {
+  //     console.warn("Arrêt ou ligne non sélectionné !");
+  //     return;
+  //   }
 
-    console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
+  //   console.log("Récupération des horaires pour :", selectedStop.value, transformedLineId.value);
 
-    const { getNextTrainTimes } = useTrainTimes();
-    const response = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
-    if (response) {
-      trainTimes.value = response; // Stocker les résultats
-      console.log("Horaires des derniers trains :", trainTimes.value);
-    }
-  };
+  //   const { getNextTrainTimes } = useTrainTimes();
+  //   const response = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
+  //   if (response) {
+  //     trainTimes.value = response; // Stocker les résultats
+  //     console.log("Horaires des derniers trains :", trainTimes.value);
+  //   }
+  // };
 </script>
