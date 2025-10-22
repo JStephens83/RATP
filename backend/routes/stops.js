@@ -1,5 +1,4 @@
 import express from "express";
-import { getDb } from "../db/client.js";
 
 const router = express.Router();
 
@@ -10,7 +9,7 @@ router.get("/", async (req, res) => {
   }
 
   try {
-    const db = await getDb();
+    const db = req.db;
 
     const trips = await db.collection("trips").find({
       route_id: line,

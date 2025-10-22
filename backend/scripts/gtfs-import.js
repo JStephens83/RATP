@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
-import { ensureDirs, downloadZip, unzip, cleanup } from "../utils/file.js";
+import { ensureDirs, downloadZip, unzip, cleanup } from "../../utils/file.js";
 import { importGTFSStream } from "../db/importGTFS-stream.js";
 import { createIndexes } from "../db/indexes.js";
-import { computeLastTrains } from "../services/trains.js";
+import { computeLastTrains } from "../../services/trains.js";
 import { closeDb } from "../db/client.js";
 
 dotenv.config({ path: ".env.local" });

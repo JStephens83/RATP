@@ -1,4 +1,4 @@
-// Connexion MongoDB
+// Connexion MongoDB. Fournit une fonction getDb() pour se connecter à MongoDB à la demande (utile dans des scripts ou tests indépendants)
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 
