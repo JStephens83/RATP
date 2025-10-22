@@ -1,22 +1,25 @@
 import { axiosClient } from "../../composables/api/utils/axiosClient";
 
-const API_BASE_URL_STOPS = "idfm/marketplace/stop-monitoring?";
+const API_BASE_URL_STOPS = "idfm/marketplace/stop-monitoring";
 
 export function useTrainTimes() {
 
   const getNextTrainTimes = async (selectedStop, transformedLineId) => {
     try {
       const stopId = selectedStop.replace("IDFM:", "STIF:StopPoint:Q:") + ":";
+      const ligneIdTrainTimes = transformedLineId.replace("IDFM:", "STIF:Line::") + ":";
+      console.log("ligneIdTrainTimes", ligneIdTrainTimes);
 
       const response = await axiosClient.get(API_BASE_URL_STOPS, {
         params: {
           MonitoringRef: stopId,
-          LineRef: transformedLineId
+          LineRef: ligneIdTrainTimes
         }
       });
 
       const monitoredStopVisits = response.data?.Siri?.ServiceDelivery?.StopMonitoringDelivery?.[0]?.MonitoredStopVisit;
       console.log("monitoredStopVisits", response.data?.Siri?.ServiceDelivery?.StopMonitoringDelivery);
+      
       if (!monitoredStopVisits || !Array.isArray(monitoredStopVisits)) return [];
 
       return monitoredStopVisits
@@ -35,6 +38,6 @@ export function useTrainTimes() {
 
   return { 
     getNextTrainTimes,
-    getLastTrainTimes  
+    // getLastTrainTimes  
   };
 }
