@@ -25,12 +25,12 @@
       @stopSelected="handleStopSelection" 
     />
 
-    <div v-if="selectedStop">
-      <!-- <label>Choisir l'affichage</label> -->
+    <div v-if="selectedStop || scheduleMode">
       <div>
         <button 
           @click="scheduleMode = 'next'"
-          :class="{ active: scheduleMode === 'next' }">
+          :class="{ active: scheduleMode === 'next' }"
+          ref="scrollTarget">
           Voir les PROCHAINS trains
         </button>
         <button 
@@ -62,6 +62,7 @@
   import StopSelector from "../components/StopSelector.vue";
   import TrainSchedule from "../components/TrainSchedule.vue";
   import { useStops} from "../composables/api/useStops.js"
+  import { useAutoScroll } from "../composables/useAutoScroll";
 
   const selectedLine = ref(null);
   const selectedDirection = ref(null);
@@ -75,6 +76,7 @@
   const isLoadingDirections = ref(false);
   const isLoadingStops = ref(false);
   const isLoadingSchedules = ref(false);
+  const { scrollTarget, triggerScroll } = useAutoScroll();
   const { getStopsFromBackend } = useStops();
   const { getNextTrainTimes } = useTrainTimes();
 
@@ -82,6 +84,10 @@
   const handleLineSelection = async (line) => {
     selectedLine.value = line;
     // console.log("Ligne sélectionnée :", line);
+    // reset des boutons de choix de mode
+    scheduleMode.value = "";
+    selectedStop.value = null;
+    
     selectedDirection.value = null;
     directions.value = [];
     stops.value = [];
@@ -106,6 +112,10 @@
   const handleDirectionSelection = async (direction) => {
     selectedDirection.value = direction;
     console.log("Direction sélectionnée ds homeview:", direction);
+
+    // reset des boutons de choix de mode
+    scheduleMode.value = "";
+    selectedStop.value = null;
 
     // Une fois la direction sélectionnée, on récupère les arrets en db
     stops.value = [];
@@ -140,27 +150,10 @@
     // réinitialisation des horaires:
     trainTimes.value = [];
 
-    // Affichage message de chargement
-    // isLoadingSchedules.value = true;
-    
-    // // Récupération des horaires
-    // const { getNextTrainTimes, getLastTrainTimes } = useTrainTimes();
-    // let response;
+    // reset si changement d'arrêt:
+    scheduleMode.value = "";
 
-    // // Choix entre prochains ou derniers trains
-    // if (scheduleMode.value === "last") {
-    //   response = await getLastTrainTimes(selectedStop.value, transformedLineId.value);
-    // } else {
-    //   response = await getNextTrainTimes(selectedStop.value, transformedLineId.value);
-    // }
-
-    // if (response) {
-    //   trainTimes.value = response;
-    //   // console.log("Horaires des derniers trains :", trainTimes.value);
-    // }
-
-    // // Masquer le message de chargement
-    // isLoadingSchedules.value = false;
+    await triggerScroll(true);
   };
 
   // CHOIX DU MODE D'AFFICHAGE:
