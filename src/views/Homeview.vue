@@ -16,7 +16,7 @@
     />
 
     <div v-if="isLoadingStops">
-      <p class="loading"><span>Chargement des arrêts...</span></p>
+      <p class="loading" ref="scrollTarget"><span>Chargement des arrêts...</span></p>
     </div>
 
     <StopSelector 
@@ -94,6 +94,8 @@
     trainTimes.value = [];
     isLoadingDirections.value = true;
 
+    await triggerScroll(true);
+
     // Récupération des directions et arrêts depuis useDirections
     const { getDirections } = useDirections();
     const { stops: fetchedStops, transformedLineId: lineId } = await getDirections(line);
@@ -123,6 +125,8 @@
     selectedStop.value = null;
     selectedStopName.value = null;
     isLoadingStops.value = true;
+
+    await triggerScroll(true);
 
     const fetchedStops = await getStopsFromBackend(transformedLineId.value, direction.id);
     stops.value = fetchedStops;
@@ -161,6 +165,7 @@
     if(!mode || !selectedStop.value) return;
 
     isLoadingSchedules.value = true;
+    await triggerScroll(true);
 
     try {
       if (mode === "next") {
