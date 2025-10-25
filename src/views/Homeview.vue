@@ -26,16 +26,16 @@
     />
 
     <div v-if="selectedStop || scheduleMode">
-      <div>
+      <div class="nextOrLast">
         <button 
           @click="scheduleMode = 'next'"
-          :class="{ active: scheduleMode === 'next' }"
+          :class="['choiceBtn',{ active: scheduleMode === 'next', 'selected-choice': scheduleMode === 'next' }]"
           ref="scrollTarget">
           Voir les PROCHAINS trains
         </button>
         <button 
           @click="scheduleMode = 'last'"
-          :class="{ active: scheduleMode === 'last' }">
+          :class="['choiceBtn',{ active: scheduleMode === 'last',  'selected-choice': scheduleMode === 'last' }]">
           Voir les DERNIERS trains
         </button>
       </div>
@@ -201,3 +201,27 @@
   //   }
   // };
 </script>
+<style scoped>
+  .nextOrLast {
+    display: flex;
+    justify-content: center;
+    margin: 15vh 0 10vh 0;
+  }
+  .choiceBtn {
+    font-family: "Doto", sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-color: #000;
+    color: #ffd700;
+    min-height : 10vh;
+    margin: 0 1rem;
+    padding: 1em;
+    border: none;  
+    transition: 0.3s;
+  }
+  .choiceBtn:hover { 
+    cursor: pointer;
+    outline: 0.2rem dotted #ffd700;
+    outline-offset: 2px;
+  }
+</style>

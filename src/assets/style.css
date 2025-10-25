@@ -32,7 +32,7 @@ ul {
   display: block;
   text-align: center;
   font-size: 2rem;
-  margin: 20vh 0 10vh 0;
+  margin: 15vh 0 10vh 0;
 }
 
 .selected {
@@ -46,6 +46,12 @@ div > ul.stop-list > li.selected, div > ul.direction-list > li.selected {
   background: #64B5F6;
   color: #292092;
   font-weight: bold;
+}
+
+.selected-choice {
+  outline: 0.2rem dotted #ffd700;
+  outline-offset: 2px;
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }
 
 .stop-list li:hover, ul.direction-list > li:hover{
