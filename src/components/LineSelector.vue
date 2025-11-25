@@ -1,3 +1,4 @@
+<!-- Composant d'affichage et de sélection des lignes de métro -->
 <template>
   <div>
     <div v-if="lignes.length > 0">

@@ -31,3 +31,7 @@ tmp/
 *.njsproj
 *.sln
 *.sw?
+
+# Ignorer les fichiers GTFS lourds
+backend/db/gtfsData/*.txt
+backend/db/gtfsData/*.zip

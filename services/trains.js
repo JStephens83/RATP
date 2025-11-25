@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import { getStopTimes } from "../db/queries.js";
 import { hhmmssToSeconds, secondsToHHMM } from "../utils/time.js";
+=======
+//Utilité à confirmer (sorte de doublons de traintimes.js dans routes)
+import { getStopTimes } from "../backend/db/queries.js";
+import { hhmmssToSeconds, secondsToHHMM } from "../backend/utils/time.js";
+>>>>>>> clean-lastTrains
 
 export async function computeLastTrains(stationId) {
   const stopTimes = await getStopTimes(stationId);

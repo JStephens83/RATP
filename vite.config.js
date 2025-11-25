@@ -7,16 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://prim.iledefrance-mobilites.fr',
+        target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      // '/OpenData': {
-      //   target: 'https://data.iledefrance-mobilites.fr',
-      //   changeOrigin: true,
-      //   rewrite: (path) => path.replace(/^\/api/, ''),
-      // },
-
     }
   }
 })

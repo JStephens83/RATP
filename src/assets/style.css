@@ -32,7 +32,11 @@ ul {
   display: block;
   text-align: center;
   font-size: 2rem;
+<<<<<<< HEAD
   margin: 20vh 0 10vh 0;
+=======
+  margin: 15vh 0 10vh 0;
+>>>>>>> clean-lastTrains
 }
 
 .selected {
@@ -48,6 +52,15 @@ div > ul.stop-list > li.selected, div > ul.direction-list > li.selected {
   font-weight: bold;
 }
 
+<<<<<<< HEAD
+=======
+.selected-choice {
+  outline: 0.2rem dotted #ffd700;
+  outline-offset: 2px;
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+>>>>>>> clean-lastTrains
 .stop-list li:hover, ul.direction-list > li:hover{
   box-shadow: 2px 2px 2px #000;
 }

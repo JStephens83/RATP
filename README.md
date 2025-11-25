@@ -5,6 +5,12 @@
 > **V1** — basée sur les API RATP pour afficher les prochains horaires en temps réel.  
 > **Vision** — application mobile avec notifications, géolocalisation et extension à tous les trains urbains de France.
 
+## 🧪 Tests
+
+Ce projet ne contient pas encore de tests automatisés.  
+Les vérifications se font via l’interface et les logs backend.  
+Des tests unitaires et d’intégration sont prévus dans la roadmap.
+
 ---
 
 ## 📖 Sommaire
@@ -57,15 +63,25 @@ cd last-call
 # 2. Installer les dépendances
 npm install
 
-# 3. Lancer le projet en mode développement
-npm run dev
+# 3. 🛠️ Configuration
+  a. Modifiez `.env.local.example` en `.env.local`
+  b. Remplissez les variables :
+    - `PRIM_API_KEY` : Votre clé API PRIM
+    - `MONGO_URI` : votre URI MongoDB Atlas
+    - `DB_NAME` : Nom de la base
+    - `WORKDIR` : Dossier local pour stocker les fichiers GTFS (par défaut `./backend/db`)
+
+# 4. Lancer le projet en mode développement
+- `npm run import:gtfs` pour importer les données GTFS (voir script dans `package.json`)
+- `npm run dev` pour le front
+- `node server.js` pour lancer le backend
 
 💡 Clé API RATP : pour exécuter ce projet, vous devrez configurer votre propre clé API RATP (Ile-de-France Mobilités). Ajoutez-la dans un fichier .env à la racine du projet : VITE_RATP_API_KEY=VOTRE_CLE_ICI
 
 ## 🖥 Stack technique
 
 - **Frontend** : Vue.js 3 + Vite.js
-- **Backend** : Aucun (application 100 % front)
+- **Backend** : Node.js + Express.js + MongoDB Atlas
 - **API** : RATP (Ile-de-France Mobilités) — REST
 - **Gestion des dépendances** : npm
 

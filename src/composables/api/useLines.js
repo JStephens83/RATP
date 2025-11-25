@@ -1,3 +1,4 @@
+// 1. Fonction de récupéraiton des lignes de métro (en local ou API)
 import linesData from "../../assets/lines.json";
 // import { axiosClient } from "../utils/axiosClient"; // Décommente si tu veux activer l'API distante
 // const API_BASE_URL_LINES = "/api/marketplace/ilico/getData?method=getlc&format=json&TransportMode=metro";

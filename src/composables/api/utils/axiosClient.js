@@ -1,10 +1,11 @@
 import axios from "axios";
 
-const API_KEY = import.meta.env.VITE_RATP_API_KEY;
+const API_KEY = import.meta.env.PRIM_API_KEY;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const axiosClient = axios.create({
+  baseURL: BACKEND_URL, // url backend express
   headers: {
-    "apikey": API_KEY,
-    "Accept": "application/json"
+    Accept: "application/json"
   }
 });

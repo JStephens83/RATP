@@ -1,5 +1,5 @@
 <template>
-  <h1>Horaires des derniers métros RATP</h1>
+  <h1>Horaires des prochains / derniers métros RATP</h1>
   <Homeview />
 </template>
 
