@@ -1,0 +1,85 @@
+<!-- 3. Composant d'affichage et de sélection des directions -->
+<template>
+  <div>
+    <div v-if="directions.length > 0">
+      <h2 class="list-labels">Sélectionnez une direction :</h2>
+      <ul class="direction-list" ref="scrollTarget">
+        <li
+          v-for="direction in directions"
+          :key="direction.id"
+          :class="{ selected: selectedDirection && selectedDirection.id === direction.id }"
+          @click="selectDirection(direction)"
+        >
+          {{ direction.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script setup>
+  // API Prochains passages - requête globale
+  // https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_globale
+  import { ref, watch } from "vue";
+  import { useDirections } from "../composables/api/useDirections";
+  import { useAutoScroll } from "../composables/useAutoScroll";
+
+  // Réception de la ligne sélectionnée depuis Homeview.vue / LineSelector.vue
+  const props = defineProps({
+    selectedLine: {
+      type: Object,
+      required: true,
+    },
+  });
+
+  const directions = ref([]);
+  const selectedDirection = ref(null);
+  const { scrollTarget, triggerScroll } = useAutoScroll();
+
+
+  watch(
+    () => props.selectedLine, 
+    async (newLineId) => {
+      if (newLineId) {
+        const { getDirections } = useDirections();
+        console.log("Appel de getDirections avec la ligne :", newLineId.name);
+        const { directions: fetchedDirections } = await getDirections(newLineId);
+        directions.value = fetchedDirections;
+        console.log("Directions récupérées :", directions.value);
+        // console.log("Arrêts récupérés dans DirectionSelector.vue :", stops.value);
+        await triggerScroll(true);
+      }
+    },
+    { immediate: true }
+  );
+
+  
+  // Déclaration événement "directionSelected"
+  const emit = defineEmits(["directionSelected"]);
+
+  // Emit de la direction sélectionnée   
+  const selectDirection = (direction) => {
+    selectedDirection.value = direction;
+    console.log("Direction sélectionnée :", selectedDirection.value);
+    emit("directionSelected", direction);
+  };
+</script>
+
+<style scoped>
+  ul.direction-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  ul.direction-list > li {
+    list-style-type: none;
+    padding: 1em;
+    cursor: pointer;
+    background-color: #050D9E;
+    color : #fff;font-size: 1.5rem;
+    min-width: 10vw;
+    text-align: center;
+    transition: 0.3s;
+  }
+</style>

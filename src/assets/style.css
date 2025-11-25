@@ -1,0 +1,81 @@
+/* Style général pour le body */
+body {
+  font-family: "Fjalla One",  Arial, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: linear-gradient(270deg, 
+    #64B5F6,
+    #050D9E,
+    #00AB91,
+    #64B5F6
+  );
+  background-size: 400% 400%;
+  animation: scrollColors 20s linear infinite alternate;
+  color: #fff;
+}
+
+@keyframes scrollColors {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.station {
+  background-color: #050D9E;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.list-labels {
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  margin: 15vh 0 10vh 0;
+}
+
+.selected {
+  outline: 0.2rem solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+div > ul.stop-list > li.selected, div > ul.direction-list > li.selected {
+  background: #64B5F6;
+  color: #292092;
+  font-weight: bold;
+}
+
+.selected-choice {
+  outline: 0.2rem dotted #ffd700;
+  outline-offset: 2px;
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.stop-list li:hover, ul.direction-list > li:hover{
+  box-shadow: 2px 2px 2px #000;
+}
+
+@keyframes heartbeatFade {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  50%  { opacity: 0; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.loading-container {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.loading > span {
+  animation: heartbeatFade 2s ease-in-out infinite;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  font-size: 2rem;
+}
