@@ -16,7 +16,7 @@
     "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "mongodb": "^6.20.0",
     "node-fetch": "^3.3.2",
     "pinia": "^3.0.1",
